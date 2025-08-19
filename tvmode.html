@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Najafoff Style</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; display: flex; height: 100vh; background-color: #f5f5f5; }
+    #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; object-fit: cover; filter: blur(5px) brightness(1.5); z-index: -1; }
+    .left-panel { width: 340px; background-color: rgba(34,34,34,0.9); color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+    .cover-container { display: flex; align-items: center; justify-content: center; position: relative; }
+    .cover { width: 250px; height: 250px; background-color: #ddd; background-image: url('head.jpg'); background-size: cover; background-position: center; border-radius: 10px; margin-bottom: 8px; }
+    #track-title { font-size: 16px; font-weight: bold; margin-top: 5px; text-align: center; color: #eee; }
+    .volume-control { display: flex; flex-direction: column; align-items: center; margin-right: 10px; }
+    .volume-control input { writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 140px; width: 6px; margin: 5px 0; }
+    .volume-label { font-size: 13px; margin-top: 5px; }
+    .progress-container { width: 100%; margin-top: 5px; }
+    .progress-container input { width: 100%; }
+    .time-display { display: flex; justify-content: space-between; font-size: 12px; margin-top: 2px; }
+    .controls { display: grid; grid-template-columns: repeat(5, 55px); grid-gap: 10px; margin-top: 20px; }
+    .controls button { padding: 10px; font-size: 18px; cursor: pointer; border: none; border-radius: 5px; background-color: #222; color: white; transition: background 0.3s; }
+    .controls button:hover { background-color: #555; }
+    .active-btn { background-color: #2ecc71 !important; color: black !important; }
+    .right-panel { flex: 1; background-color: rgba(51,51,51,0.9); color: white; overflow-y: auto; padding: 20px; }
+    .track-list { list-style: none; padding: 0; margin: 0; }
+    .track-list li { padding: 10px; border-bottom: 1px solid #444; cursor: pointer; transition: background-color 0.3s, color 0.3s; }
+    .track-list li::before { content: "🎵 "; color: #bbb; }
+    .track-list li.active { background-color: #2ecc71; color: black; font-weight: bold; }
+    .track-list li.active::before { color: black; }
+    audio { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="left-panel">
+  <div class="cover-container">
+    <div class="volume-control">
+      <span>🔊</span>
+      <input type="range" id="volume" min="0" max="1" step="0.01">
+      <div class="volume-label" id="volume-label">70%</div>
+    </div>
+    <div class="cover" id="cover"></div>
+  </div>
+
+  <div id="track-title"></div>
+
+  <div class="progress-container">
+    <input type="range" id="progress" value="0" step="0.1" min="0" max="100">
+    <div class="time-display">
+      <span id="current-time">0:00</span>
+      <span id="total-time">0:00</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button onclick="playTrack()">▶️</button>
+    <button onclick="pauseTrack()">⏸</button>
+    <button onclick="prevTrack()">⏮</button>
+    <button onclick="nextTrack()">⏭</button>
+    <button id="randomBtn" onclick="toggleRandom()">🔀</button>
+    <button onclick="seekBackward()">⏪</button>
+    <button onclick="seekForward()">⏩</button>
+    <button onclick="downloadCurrent()">⬇️</button>
+    <button id="muteBtn" onclick="toggleMute()">🔊</button>
+    <button id="repeatBtn" onclick="toggleRepeat()">🔁</button>
+  </div>
+</div>
+
+<div class="right-panel">
+  <h2>Şarkı Listesi</h2>
+  <ul class="track-list" id="trackList"></ul>
+</div>
+
+<audio id="audio" controls></audio>
+
+<script>
+const tracks = [
+	"track (1).mp3",
+	"track (2).mp3",
+	"track (3).mp3",
+	"track (4).mp3",
+	"track (5).mp3",
+	"track (6).mp3",
+	"track (7).mp3",
+	"track (8).mp3",
+	"track (9).mp3",
+	"track (10).mp3",
+	"track (11).mp3",
+	"track (12).mp3",
+	"track (13).mp3",
+	"track (14).mp3",
+	"track (15).mp3",
+	"track (16).mp3",
+	"track (17).mp3",
+	"track (18).mp3",
+	"track (19).mp3",
+	"track (20).mp3",
+	"track (21).mp3",
+	"track (22).mp3",
+	"track (23).mp3",
+	"track (24).mp3",
+	"track (25).mp3",
+	"track (26).mp3",
+	"track (27).mp3",
+	"track (28).mp3",
+	"track (29).mp3",
+	"track (30).mp3",
+	"track (31).mp3",
+	"track (32).mp3",
+	"track (33).mp3",
+	"track (34).mp3",
+	"track (35).mp3",
+	"track (36).mp3",
+	"track (37).mp3",
+	"track (38).mp3",
+	"track (39).mp3",
+	"track (40).mp3",
+	"track (41).mp3",
+	"track (42).mp3",
+	"track (43).mp3",
+	"track (44).mp3",
+	"track (45).mp3",
+	"track (46).mp3",
+	"track (47).mp3",
+	"track (48).mp3",
+	"track (49).mp3",
+	"track (50).mp3",
+	"track (51).mp3",
+	"track (52).mp3",
+	"track (53).mp3",
+	"track (54).mp3",
+	"track (55).mp3",
+	"track (56).mp3",
+	"track (57).mp3",
+	"track (58).mp3",
+	"track (59).mp3",
+	"track (60).mp3",
+	"track (61).mp3",
+	"track (62).mp3",
+	"track (63).mp3",
+	"track (64).mp3",
+	"track (65).mp3",
+	"track (66).mp3",
+	"track (67).mp3",
+	"track (68).mp3",
+	"track (69).mp3",
+	"track (70).mp3",
+	"track (71).mp3",
+	"track (72).mp3",
+	"track (73).mp3",
+	"track (74).mp3",
+	"track (75).mp3",
+	"track (76).mp3",
+	"track (77).mp3",
+	"track (78).mp3",
+	"track (79).mp3",
+	"track (80).mp3",
+	"track (81).mp3",
+	"track (82).mp3",
+	"track (83).mp3",
+	"track (84).mp3",
+	"track (85).mp3",
+	"track (86).mp3",
+	"track (87).mp3",
+	"track (88).mp3",
+	"track (89).mp3",
+	"track (90).mp3",
+	"track (91).mp3",
+	"track (92).mp3",
+	"track (93).mp3",
+	"track (94).mp3",
+	"track (95).mp3",
+	"track (96).mp3",
+	"track (97).mp3",
+	"track (98).mp3",
+	"track (99).mp3",
+	"track (100).mp3",
+	"track (101).mp3",
+	"track (102).mp3",
+	"track (103).mp3",
+	"track (104).mp3",
+	"track (105).mp3",
+	"track (106).mp3",
+	"track (107).mp3",
+	"track (108).mp3",
+	"track (109).mp3",
+	"track (110).mp3",
+	"track (111).mp3",
+	"track (112).mp3",
+	"track (113).mp3",
+	"track (114).mp3",
+	"track (115).mp3",
+	"track (116).mp3",
+	"track (117).mp3",
+	"track (118).mp3",
+	"track (119).mp3",
+	"track (120).mp3",
+	"track (121).mp3",
+	"track (122).mp3",
+	"track (123).mp3",
+	"track (124).mp3",
+	"track (125).mp3",
+	"track (126).mp3",
+	"track (127).mp3",
+	"track (128).mp3",
+	"track (129).mp3",
+	"track (130).mp3",
+	"track (131).mp3",
+	"track (132).mp3",
+	"track (133).mp3",
+	"track (134).mp3",
+	"track (135).mp3",
+	"track (136).mp3",
+	"track (137).mp3",
+	"track (138).mp3",
+	"track (139).mp3",
+	"track (140).mp3",
+	"track (141).mp3",
+	"track (142).mp3",
+	"track (143).mp3",
+	"track (144).mp3",
+	"track (145).mp3",
+	"track (146).mp3",
+	"track (147).mp3",
+	"track (148).mp3",
+	"track (149).mp3",
+	"track (150).mp3",
+	"track (151).mp3",
+	"track (152).mp3",
+	"track (153).mp3",
+	"track (154).mp3",
+	"track (155).mp3",
+	"track (156).mp3",
+	"track (157).mp3",
+	"track (158).mp3",
+	"track (159).mp3",
+	"track (160).mp3",
+	"track (161).mp3",
+	"track (162).mp3",
+	"track (163).mp3",
+	"track (164).mp3",
+	"track (165).mp3",
+	"track (166).mp3",
+	"track (167).mp3",
+	"track (168).mp3",
+	"track (169).mp3",
+	"track (170).mp3"
+
+];
+
+const displayNames = [
+  "1. Zaur Aşiq - Gəşəy gəşəy",
+"2. Kron1k - Yarım kalan sigara",
+"3. Nico Parga - Season",
+"4. Okaber - Son Mahnı",
+"5. Sagopa Kajmer - Merhametine Dön",
+"6. Diva - Beyonce",
+"7. Breyth - Indra",
+"8. Ramil Shadman - Avara",
+"9. All Eyez on me",
+"10. Hüseyn Dərya - Köhnə Bakı",
+"11. Mos Def - Auditorium",
+"12. KVPV - Vulgar",
+"13. Disiz.La.Peste - À La Conquête",
+"14. Bouga - Belsunce Breakdown",
+"15. Regarde - Claap! & S.A.N.T.A.N.A.",
+"16. Üzeyir Mehdizadə - Rəvayət",
+"17. Jah Khalib - SnD",
+"18. Narkoz Ex - Tatlı Tecrübe",
+"19. Üzeyir Mehdizade - Denqi Denqi",
+"20. Mehdi Sadiq - Yaşamaq Lazım",
+"21. Essay - Find You",
+"22. Mary J. Blige - Family Affair",
+"23. Mürsəl Səfərov - Avara",
+"24. Bizzey - Traag",
+"25. Furilla@Joy - Afrodisiak",
+"26. Edward Maya - Stereo Love",
+"27. Rəhim Maştağa - Çitan Çitan",
+"28. MOSART - Afrika Nadi",
+"29. Cücələrim Phonk",
+"30. Zawanbeats - Baku Project",
+"31. Mürsəl Səfərov - Boş ver",
+"32. GuiltyBeatz - AKWAABA",
+"33. Buraka Som Sistema - Kalemba",
+"34. Etimad - Günah Kimdədir",
+"35. Aydın Sani - İcazə ver",
+"36. Ömer Bükülmezoğlu - Cry",
+"37. Moon EC - HazenMusic",
+"38. Sagopa Kajmer & Kolera - Merhametine Dön",
+"39. I Got Summer On My Mind",
+"40. Jivishov - Dünya Hey Fırlanır",
+"41. Umut INC. - Yenə Gedirəm Mal Mal Dalınca",
+"42. Elit Star Cəmilə - Yollarıma Çıxma",
+"43. DJ Sebastian Fernández - Mix Rkt 2024 (Remix)",
+"44. Burak - Ben Kalbimin Orta Yerine Seni Yazdım",
+"45. Crazy Frog - 1001 Nights (Bass Boosted)",
+"46. Chipinkos - İntro",
+"47. Ehtiram - Как Xорошо Tак Xорошо",
+"48. DJ JHOLJHOL DA PENHA - UH UH UH VS AQUI NA PENHA",
+"49. Rəşad Dağlı - Daha Nə Baxırsan",
+"50. V $ X V PRiNCE - Не интересно",
+"51. Bouga - Belsunce Breakdown",
+"52. KVPV - Vulgar (Slow)",
+"53. Shaggy - Mad Mad World",
+"54. Kəmalə Günəşli - Çini Çaydan",
+"55. Nuri Sərinləndirici - Gözləyirəm",
+"56. Misha Xramovi - В экстазе",
+"57. Mürsəl Səfərov - Məni İtirdin",
+"58. Snoop Dogg - Dr.Dre (Remix)",
+"59. Ədalət Şükürov - Bağlı Qapı",
+"60. Seymur Məmmədov - Sevdiyim İnsan",
+"61. DJ Sebastian Fernández - Mix Rkt 2024 (Remix)",
+"62. Günay İbrahimli - Sənə Bağlanıram",
+"63. Beat Dominator - Bass...Can U Hear Me?",
+"64. Biz - Black Night",
+"65. Xcho - Эскизы",
+"66. Henrique Camacho & Fatality - Sevilla",
+"67. Ramil Nabran - Bomba",
+"68. Roy Jones Jr. - Can't Be Touched",
+"69. Jay Meel - Popuri",
+"70. Qaraqan - Sən və Mən",
+"71. Flora Kərimova - Məni Məni",
+"72. Alexandra Stan - Mr. Saxobeat",
+"73. Mc Leléto - Ay Papi",
+"74. Təhmin Vəlizadə - Ölərdi",
+"75. DJ Freshly - Latinos a Bailar",
+"76. Mario Fresh & RENVTØ - Necesar",
+"77. Edward Maya & Vika Jigulina - Stereo Love",
+"78. Tefo & FatS - Niva Verir Təbi 2015",
+"79. SHAHMEN - Mark",
+"80. BONES - Sodium",
+"81. Edsited & Kid Moonsta - Tiktok Anthem",
+"82. Bad Bunny - La Romana",
+"83. Youngworldibi - Still Me (Freestyle)",
+"84. Aygün - Yenə Tək",
+"85. Miro - Təcili Yardım",
+"86. isabb - Я хочу приору",
+"87. Matt Sebastian - Dandole Rakataka",
+"88. Yatın İstisi Şüşələr Aşağıda",
+"89. JANAGA - Малыш",
+"90. Ace of Base - Happy Nation",
+"91. Black Light - Ayrılmarıq",
+"92. Dj Gere - Mega Ñengo Flow Rkt",
+"93. Yyyikes! - Way U Move",
+"94. Ədalət Şükürov - Açıq Qapı",
+"95. Geceler",
+"96. The Game - How We Do",
+"97. Xosrov - Burda Görmüyüm Səni",
+"98. Elit Star Cəmilə - Ayrılığı Mənə Sən Öyrətmisən",
+"99. Qoy Qış Gəlsin",
+"100. Sagopa Kajmer - Bu Böyledir (2021 Tek Edit)",
+"101. DJ Sebastian Fernández - Mix Rkt 2024 (Remix)",
+"102. Roy Jones Jr. - Can't Be Touched",
+"103. Matt Sebastian - Dandole Rakataka",
+"104. Mohammed - Sie Liegt In Meinen Armen",
+"105. Talıb Tale - Bilirsənki",
+"106. MegaBeatsZ - Hesret Neğmesi Remix",
+"107. Don Omar - Dale Don Dale",
+"108. Okaber - Axtarma",
+"109. Ramil Nabran - Aftoş Gəlir",
+"110. Donny Duardo - Agáchate",
+"111. V $ X V PRiNCE - Голодная собака",
+"112. Javid Amir - Yenə Ağlımda",
+"113. Vahid Rostami - Getme Yarim",
+"114. Elşad - Qara",
+"115. Keti Garbi - Esena Mono (Summer Dance Remix)",
+"116. EA7 - In Da Club",
+"117. Crazy Frog - 1001 Nights",
+"118. Nuri Serinlendirici - Durnam",
+"119. DJ Maphorisa & Shimza - Makhe",
+"120. Javid Amir - Hardan Hara",
+"121. İlkin Abbasov & Lila Hood - Günah",
+"122. Pharoahe Monch - Simon Says",
+"123. Sir Speedy - Vamo Allá (feat. Great Kilo)",
+"124. Talıb Tale & Zeynəb Həsəni - Səbr Elə",
+"125. SERYOGA - Чёрный бумеp",
+"126. Sean Paul - Temperature",
+"127. Гио ПиКа - Один в поле воин",
+"128. Zamiq Hüseynov - Kaman",
+"129. Ludacris - Act a Fool",
+"130. Tuti Dj - El Hechizo Rkt",
+"131. Fan - Politics (as always) (Feat. Smoke Greene & Iroq)",
+"132. Massive Lust - Never",
+"133. Aydınçik - Gülnarə",
+"134. Talıb Tale - Gecəmiz",
+"135. Vüqar Biləcəri - Gəlin Deyək Meyxana Muzikalni",
+"136. Francesco Ricci - Over You",
+"137. Lana Del Rey - Diet Mountain Dew",
+"138. Basta & HammAli & Navai - Где ты теперь и с кем",
+"139. Massari - Inta Hayati",
+"140. Diet Mountain Dew",
+"141. Kaspiyskiy Gruz - Доедешь - пиши",
+"142. Gesaffelstein - Opr",
+"143. Alighieri - Recomposition Twelve",
+"144. Ulukmanapo - Не сегодня",
+"145. NAYMADA - Ты мой рай",
+"146. Ivan Afro5 - Strange",
+"147. USHER - Yeah!",
+"148. Speedy - Sientelo",
+"149. sayc.latam - BLUNTED 4",
+"150. Afrikan Drums - Comitin Dedo",
+"151. WEGH - KARARDI BULUTLAR",
+"152. Cheb Rezki - Ana Al Ghaltan",
+"153. Bezpan - Sosial",
+"154. KRBK - Девушка в чёрном",
+"155. Elit Star Cəmilə - Səninəm",
+"156. Jennifer Lopez - On the Floor",
+"157. Inna - Amazing",
+"158. 7azilov - Нежно х тримай",
+"159. Fatih Bogalar - Te Ma Etmaje",
+"160. Mahir - Dönər Əlbət",
+"161. DoggyStyleeee - West Coast",
+"162. Okaber - Xarabadan Qeydlər (18+)",
+"163. Eyyub Yaqubov - Bakılı Balası",
+"164. Uzeyir Mehdizade - Təki Sən Xoşbəxt Olasan",
+"165. Tuğçe Kandemir - Aradan Çok Yıllar Geçti.",
+"166. Breyth - Increasing Attitude",
+"167. Gunay Ibrahimli - Dəlisiyəm Gecənin",
+"168. Bianka - Были танцы",
+"169. Xəzər Süleymanlı & Nazan Öncel - Beni Hatırla",
+"170. AIS - Nece Darıxmışam"
+
+];
+
+const audio = document.getElementById('audio');
+const trackTitle = document.getElementById('track-title');
+const trackListElement = document.getElementById('trackList');
+const progress = document.getElementById('progress');
+const volume = document.getElementById('volume');
+const volumeLabel = document.getElementById('volume-label');
+const currentTimeEl = document.getElementById('current-time');
+const totalTimeEl = document.getElementById('total-time');
+const randomBtn = document.getElementById('randomBtn');
+const repeatBtn = document.getElementById('repeatBtn');
+
+let currentTrack = 0;
+let isRandom = false;
+let isRepeat = false;
+let trackChangeLock = false; // ← yeni eklenen kilit
+
+// Listeyi oluştur
+displayNames.forEach((name,i)=>{
+  const li = document.createElement('li');
+  li.textContent = name;
+  li.onclick = ()=>{ currentTrack=i; loadTrack(currentTrack); };
+  trackListElement.appendChild(li);
+});
+
+function loadTrack(index){
+  [...trackListElement.children].forEach((el, idx)=>{
+    el.classList.toggle('active', idx===index);
+  });
+  audio.src = tracks[index];
+  trackTitle.textContent = displayNames[index];
+  audio.play();
+  if ('mediaSession' in navigator) updateMediaMetadata();
+}
+
+function playTrack(){ audio.play(); }
+function pauseTrack(){ audio.pause(); }
+function seekForward(){ audio.currentTime+=5; }
+function seekBackward(){ audio.currentTime-=5; }
+
+function safeNextTrack(){
+    if(trackChangeLock) return;
+    trackChangeLock = true;
+    currentTrack = isRandom ? Math.floor(Math.random()*tracks.length) : (currentTrack+1)%tracks.length;
+    loadTrack(currentTrack);
+    setTimeout(()=>{ trackChangeLock = false; }, 300); // 0.3s kilit
+}
+
+function safePrevTrack(){
+    if(trackChangeLock) return;
+    trackChangeLock = true;
+    currentTrack = (currentTrack-1+tracks.length)%tracks.length;
+    loadTrack(currentTrack);
+    setTimeout(()=>{ trackChangeLock = false; }, 300);
+}
+
+function downloadCurrent(){
+  const url = tracks[currentTrack];
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = tracks[currentTrack];
+  a.click();
+}
+
+function toggleRandom(){ isRandom=!isRandom; randomBtn.classList.toggle("active-btn",isRandom);}
+function toggleRepeat(){ isRepeat=!isRepeat; audio.loop=isRepeat; repeatBtn.classList.toggle("active-btn",isRepeat);}
+function formatTime(sec){ if(isNaN(sec)) return "0:00"; const m=Math.floor(sec/60); const s=Math.floor(sec%60).toString().padStart(2,"0"); return `${m}:${s}`;}
+
+audio.addEventListener('timeupdate', ()=>{
+  progress.value = (audio.currentTime/audio.duration)*100||0;
+  currentTimeEl.textContent = formatTime(audio.currentTime);
+  totalTimeEl.textContent = formatTime(audio.duration);
+});
+
+progress.addEventListener('input', ()=>{ audio.currentTime=(progress.value/100)*audio.duration; });
+
+volume.addEventListener('input', ()=>{
+  audio.volume = volume.value;
+  volumeLabel.textContent = Math.round(volume.value*100)+"%";
+});
+
+audio.addEventListener('ended', ()=>{
+    if(!isRepeat) safeNextTrack();
+});
+
+window.onload = ()=>{
+  loadTrack(currentTrack);
+  volume.value=0.7;
+  audio.volume=0.7;
+  volumeLabel.textContent="70%";
+};
+
+/* --- Klavye tuşları ile kontrol --- */
+document.addEventListener('keydown', (e) => {
+    switch(e.code) {
+        case 'Space':
+            e.preventDefault();
+            audio.paused ? playTrack() : pauseTrack();
+            break;
+        case 'KeyR': toggleRepeat(); break;
+		case 'KeyM': toggleMute(); break;
+        case 'KeyS': toggleRandom(); break;
+        case 'ArrowUp':
+            audio.volume = Math.min(audio.volume + 0.05, 1);
+            volume.value = audio.volume;
+            volumeLabel.textContent = Math.round(audio.volume*100) + "%";
+            break;
+        case 'ArrowDown':
+            audio.volume = Math.max(audio.volume - 0.05, 0);
+            volume.value = audio.volume;
+            volumeLabel.textContent = Math.round(audio.volume*100) + "%";
+            break;
+        case 'ArrowRight': seekForward(); break;
+        case 'ArrowLeft': seekBackward(); break;
+        case 'MediaTrackNext': safeNextTrack(); break;
+        case 'MediaTrackPrevious': safePrevTrack(); break;
+    }
+});
+
+/* --- Media Session API --- */
+if ('mediaSession' in navigator) {
+    function updateMediaMetadata() {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: displayNames[currentTrack],
+            artist: 'MP3 Player',
+            album: 'Çalma Listesi',
+            artwork: [{ src: 'head.jpg', sizes: '250x250', type: 'image/jpeg' }]
+        });
+    }
+
+    updateMediaMetadata();
+
+    navigator.mediaSession.setActionHandler('play', playTrack);
+    navigator.mediaSession.setActionHandler('pause', pauseTrack);
+    navigator.mediaSession.setActionHandler('previoustrack', safePrevTrack);
+    navigator.mediaSession.setActionHandler('nexttrack', safeNextTrack);
+    navigator.mediaSession.setActionHandler('seekbackward', seekBackward);
+    navigator.mediaSession.setActionHandler('seekforward', seekForward);
+
+    audio.addEventListener('play', updateMediaMetadata);
+    audio.addEventListener('ended', () => { if (!isRepeat) safeNextTrack(); updateMediaMetadata(); });
+}
+
+// Favori sistemi
+let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+[...trackListElement.children].forEach((li, i) => {
+    const star = document.createElement('span');
+    star.textContent = favorites.includes(i) ? '⭐' : '☆';
+    star.classList.add('favorite');
+    star.style.marginRight = '5px'; // başa koyduğumuz için sağa boşluk
+    star.style.cursor = 'pointer';
+    
+    star.onclick = (e) => {
+        e.stopPropagation(); // Şarkı seçimini bozmasın
+        if(favorites.includes(i)) {
+            favorites = favorites.filter(x => x !== i);
+            star.textContent = '☆';
+        } else {
+            favorites.push(i);
+            star.textContent = '⭐';
+        }
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+    };
+    
+    li.prepend(star); // burada append yerine prepend kullanıyoruz
+});
+
+function applyDarkTheme(){
+    document.body.style.backgroundColor = '#222';
+    document.body.style.color = '#eee';
+    document.querySelector('.left-panel').style.backgroundColor = 'rgba(34,34,34,0.9)';
+    document.querySelector('.right-panel').style.backgroundColor = 'rgba(51,51,51,0.9)';
+    document.querySelectorAll('.track-list li').forEach(li => li.style.color = '#eee');
+    trackTitle.style.color = '#eee';
+    document.querySelectorAll('.controls button').forEach(btn => {
+        btn.style.color = '#eee';
+        btn.style.backgroundColor = '#222';
+    });
+    // Ses ve zaman yazıları
+    volumeLabel.style.color = '#111'; // slider içindeki yazı biraz koyu
+    currentTimeEl.style.color = '#111';
+    totalTimeEl.style.color = '#111';
+    // Slider renkleri
+    progress.style.background = '#555';
+    progress.style.accentColor = '#2ecc71';
+    volume.style.background = '#555';
+    volume.style.accentColor = '#2ecc71';
+
+    themeBtn.textContent = '☀️ Açık Tema';
+    document.body.dataset.theme = 'dark';
+    localStorage.setItem('theme','dark');
+}
+
+function applyLightTheme(){
+    document.body.style.backgroundColor = '#f5f5f5';
+    document.body.style.color = '#111';
+    document.querySelector('.left-panel').style.backgroundColor = 'rgba(255,255,255,0.9)';
+    document.querySelector('.right-panel').style.backgroundColor = 'rgba(240,240,240,0.9)';
+    document.querySelectorAll('.track-list li').forEach(li => li.style.color = '#111');
+    trackTitle.style.color = '#111';
+    document.querySelectorAll('.controls button').forEach(btn => {
+        btn.style.color = '#111';
+        btn.style.backgroundColor = '#eee';
+    });
+    // Ses ve zaman yazıları
+    volumeLabel.style.color = '#111';
+    currentTimeEl.style.color = '#111';
+    totalTimeEl.style.color = '#111';
+    // Slider renkleri
+    progress.style.background = '#ddd';
+    progress.style.accentColor = '#2ecc71';
+    volume.style.background = '#ddd';
+    volume.style.accentColor = '#2ecc71';
+
+    themeBtn.textContent = '🌙 Karanlık Tema';
+    document.body.dataset.theme = 'light';
+    localStorage.setItem('theme','light');
+}
+
+// Tema butonunu oluştur ve sol panelin üstüne ekle
+const themeBtn = document.createElement('button');
+themeBtn.style.padding = '8px 12px';
+themeBtn.style.marginBottom = '10px';
+themeBtn.style.cursor = 'pointer';
+themeBtn.style.border = 'none';
+themeBtn.style.borderRadius = '5px';
+themeBtn.style.fontSize = '14px';
+themeBtn.style.backgroundColor = '#222';
+themeBtn.style.color = '#eee';
+themeBtn.textContent = '🌙 Karanlık Tema';
+themeBtn.onclick = ()=>{
+    if(document.body.dataset.theme === 'dark'){
+        applyLightTheme();
+    } else {
+        applyDarkTheme();
+    }
+};
+document.querySelector('.left-panel').prepend(themeBtn);
+
+// Sayfa açıldığında kaydedilen temayı uygula
+const savedTheme = localStorage.getItem('theme');
+if(savedTheme === 'dark'){
+    applyDarkTheme();
+} else {
+    applyLightTheme();
+}
+function toggleMute() {
+    audio.muted = !audio.muted; // Sesin kapatılıp açılması
+    const muteBtn = document.getElementById('muteBtn');
+    if(audio.muted){
+        muteBtn.textContent = '🔇'; // Mute ikonu
+        muteBtn.classList.add('active-btn'); // Buton rengini değiştir
+    } else {
+        muteBtn.textContent = '🔊'; // Ses ikonu
+        muteBtn.classList.remove('active-btn');
+    }
+}
+
+function toggleMute() {
+    const muteBtn = document.getElementById('muteBtn');
+
+    if(!audio.muted){ // Ses açıksa mute yap
+        audio.muted = true;
+        audio.volume = 0;
+        volume.value = 0;
+        volumeLabel.textContent = "0%";
+        muteBtn.textContent = '🔇';
+        muteBtn.classList.add('active-btn');
+    } else { // Ses kapalıysa unmute yap ve varsayılan ses değerini geri getir
+        audio.muted = false;
+        audio.volume = 0.7; // veya istediğin varsayılan ses
+        volume.value = 0.7;
+        volumeLabel.textContent = "70%";
+        muteBtn.textContent = '🔊';
+        muteBtn.classList.remove('active-btn');
+    }
+}
+
+// Slider hareketi mute'u kaldırır ve sesi ayarlar
+volume.addEventListener('input', ()=>{
+    if(audio.muted && volume.value > 0){ 
+        audio.muted = false; // Slider hareketi unmute yapar
+        const muteBtn = document.getElementById('muteBtn');
+        muteBtn.textContent = '🔊';
+        muteBtn.classList.remove('active-btn');
+    }
+    audio.volume = volume.value;
+    volumeLabel.textContent = Math.round(volume.value*100)+"%";
+});
+
+</script>
+
+
+</body>
+</html>
