@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Gelişmiş MP3 Player</title>
+  <title>Najafoff Style</title>
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; font-family: Arial, sans-serif; display: flex; height: 100vh; background-color: #f5f5f5; }
@@ -526,6 +526,7 @@ document.addEventListener('keydown', (e) => {
             audio.paused ? playTrack() : pauseTrack();
             break;
         case 'KeyR': toggleRepeat(); break;
+		case 'KeyM': toggleMute(); break;
         case 'KeyS': toggleRandom(); break;
         case 'ArrowUp':
             audio.volume = Math.min(audio.volume + 0.05, 1);
