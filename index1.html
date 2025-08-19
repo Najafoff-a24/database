@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>MP3 Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+      padding: 40px;
+    }
+    audio {
+      width: 100%;
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #track-title {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>MP3 Player</h1>
+
+  <audio id="audio" controls></audio>
+
+  <div>
+    <button onclick="prevTrack()">⏮ Önceki</button>
+    <button onclick="playTrack()">▶️ Oynat</button>
+    <button onclick="pauseTrack()">⏸ Duraklat</button>
+    <button onclick="nextTrack()">⏭ Sonraki</button>
+  </div>
+
+  <div id="track-title"></div>
+
+  <script>
+    const totalTracks = 170;
+    const tracks = [];
+
+    // Aynı klasördeki dosyalar için sadece isimleri listele
+    for (let i = 1; i <= totalTracks; i++) {
+      tracks.push(`track (${i}).mp3`);
+    }
+
+    let currentTrack = 0;
+    const audio = document.getElementById('audio');
+    const trackTitle = document.getElementById('track-title');
+
+    function loadTrack(index) {
+      audio.src = tracks[index];
+      trackTitle.textContent = `Şu an çalıyor: ${tracks[index]}`;
+      audio.play();
+    }
+
+    function playTrack() {
+      audio.play();
+    }
+
+    function pauseTrack() {
+      audio.pause();
+    }
+
+    function nextTrack() {
+      currentTrack = (currentTrack + 1) % tracks.length;
+      loadTrack(currentTrack);
+    }
+
+    function prevTrack() {
+      currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+      loadTrack(currentTrack);
+    }
+
+    audio.addEventListener('ended', () => {
+      nextTrack();
+    });
+
+    window.onload = () => {
+      loadTrack(currentTrack);
+    };
+  </script>
+</body>
+</html>
