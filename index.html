@@ -31,6 +31,44 @@
   </style>
 </head>
 <body>
+<dialog open style="
+  border: none;
+  border-radius: 12px;
+  padding: 25px;
+  max-width: 420px;
+  width: 90%;
+  background: #222;
+  color: #eee;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  text-align: center;
+">
+
+  <h2 style="margin-top:0; color:#2ecc71;">
+    🚀 YENİ GÜNCƏLLƏMƏ!!!
+  </h2>
+
+  <p style="font-size:15px; line-height:1.5;">
+    Konum erişiminə icazə versəniz,<br>
+    <b>sizinlə eyni anda mahnıya qulaq asan şəxsləri</b><br>
+    görə bilərsiz!
+  </p>
+
+  <form method="dialog">
+    <button style="
+      margin-top:15px;
+      padding:10px 22px;
+      font-size:15px;
+      border:none;
+      border-radius:6px;
+      background:#2ecc71;
+      color:#000;
+      cursor:pointer;
+    ">
+      Oldu!
+    </button>
+  </form>
+
+</dialog>
 
 <video autoplay muted loop id="bg-video">
   <source src="videoplayback.mp4" type="video/mp4">
@@ -68,6 +106,25 @@
     <button id="muteBtn" onclick="toggleMute()">🔊</button>
     <button id="repeatBtn" onclick="toggleRepeat()">🔁</button>
   </div>
+	<!-- Xəritə -->
+<div style="
+  width:100%;
+  height:200px;
+  margin-top:15px;
+  border-radius:10px;
+  overflow:hidden;
+  border:2px solid #2ecc71;
+">
+  <iframe
+    src="https://maps.google.com/maps?q=40.4093,49.8671&z=12&output=embed"
+    width="100%"
+    height="100%"
+    style="border:0;"
+    loading="lazy"
+    allowfullscreen>
+  </iframe>
+</div>
+
 </div>
 
 <div class="right-panel">
