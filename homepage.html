@@ -1,0 +1,2921 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sweetie Fox!</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+    color: white;
+    background: #000;
+}
+
+
+/* =========================
+   ARKA PLAN VİDEO
+========================= */
+
+#backgroundVideo {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    z-index: -5;
+}
+
+
+/* =========================
+   VIDEO BLUR
+========================= */
+
+.videoBlur {
+    position: fixed;
+
+    inset: -25px;
+
+    z-index: -4;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    background: rgba(0, 0, 0, 0.20);
+}
+
+
+/* =========================
+   KARARTMA
+========================= */
+
+.darkOverlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: -3;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,.25),
+            rgba(0,0,0,.35)
+        );
+}
+
+
+/* =========================
+   ANA KONTEYNER
+========================= */
+
+.container {
+
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    padding-top: 40px;
+}
+
+
+/* =========================
+   SAAT
+========================= */
+
+.clock {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(50px, 7vw, 90px);
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-shadow: 0 5px 35px rgba(0,0,0,.55);
+}
+
+
+/* =========================
+   TARİH
+========================= */
+
+.date {
+
+    margin-top: 7px;
+
+    font-size: 15px;
+
+    opacity: .65;
+
+}
+
+
+/* =========================
+   HAVA DURUMU
+========================= */
+
+.weather {
+
+    margin-top: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding:
+        9px 15px;
+
+    border-radius: 50px;
+
+    background:
+        rgba(255,255,255,.10);
+
+    border:
+        1px solid
+        rgba(255,255,255,.18);
+
+    backdrop-filter:
+        blur(25px);
+
+    -webkit-backdrop-filter:
+        blur(25px);
+
+    box-shadow:
+        inset 0 1px
+        rgba(255,255,255,.18),
+
+        0 8px 30px
+        rgba(0,0,0,.20);
+
+    font-size: 13px;
+}
+
+
+.weatherIcon {
+
+    font-size: 18px;
+
+}
+
+
+.weatherTemp {
+
+    font-weight: 500;
+
+}
+
+
+.weatherLocation {
+
+    opacity: .55;
+
+}
+
+
+/* =========================
+   ARAMA
+========================= */
+
+.searchContainer {
+
+    width: min(
+        680px,
+        86%
+    );
+
+    margin-top: 62px;
+
+    position: relative;
+}
+
+
+.search {
+
+    width: 100%;
+
+    height: 62px;
+
+    border-radius: 21px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.22);
+
+    outline: none;
+
+    padding:
+        0 58px 0 23px;
+
+    font-size: 16px;
+
+    color: white;
+
+    background:
+        rgba(255,255,255,.11);
+
+    backdrop-filter:
+        blur(30px);
+
+    -webkit-backdrop-filter:
+        blur(30px);
+
+    box-shadow:
+
+        inset 0 1px
+        rgba(255,255,255,.22),
+
+        0 15px 45px
+        rgba(0,0,0,.25);
+
+    transition: .25s;
+}
+
+
+.search::placeholder {
+
+    color:
+        rgba(255,255,255,.60);
+
+}
+
+
+.search:focus {
+
+    background:
+        rgba(255,255,255,.15);
+
+    border-color:
+        rgba(255,255,255,.38);
+
+    box-shadow:
+
+        inset 0 1px
+        rgba(255,255,255,.30),
+
+        0 15px 50px
+        rgba(0,0,0,.35);
+
+}
+
+
+.searchIcon {
+
+    position: absolute;
+
+    right: 21px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    font-size: 22px;
+
+    opacity: .65;
+
+}
+
+
+/* =========================
+   SHORTCUTLAR
+========================= */
+
+.shortcuts {
+
+    width: min(
+        800px,
+        90%
+    );
+
+    margin-top: 35px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+}
+
+
+/* =========================
+   SHORTCUT
+========================= */
+
+.shortcut {
+
+    width: 92px;
+
+    height: 92px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border-radius: 21px;
+
+    background:
+        rgba(255,255,255,.10);
+
+    border:
+        1px solid
+        rgba(255,255,255,.18);
+
+    backdrop-filter:
+        blur(25px);
+
+    -webkit-backdrop-filter:
+        blur(25px);
+
+    box-shadow:
+
+        inset 0 1px
+        rgba(255,255,255,.18),
+
+        0 10px 30px
+        rgba(0,0,0,.20);
+
+    cursor: grab;
+
+    user-select: none;
+
+    transition:
+        transform .20s,
+        background .20s,
+        opacity .20s;
+}
+
+
+.shortcut:hover {
+
+    transform:
+        translateY(-5px)
+        scale(1.04);
+
+    background:
+        rgba(255,255,255,.17);
+
+}
+
+
+.shortcut:active {
+
+    cursor: grabbing;
+
+}
+
+
+.shortcut img {
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 10px;
+
+    object-fit: cover;
+
+}
+
+
+.shortcutName {
+
+    width: 75px;
+
+    text-align: center;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+    font-size: 12px;
+
+    opacity: .80;
+
+}
+
+
+/* SÜRÜKLENƏN */
+
+.shortcut.dragging {
+
+    opacity: .30;
+
+    transform:
+        scale(.90);
+
+}
+
+
+/* =========================
+   EKLE BUTONU
+========================= */
+
+.addShortcut {
+
+    width: 92px;
+
+    height: 92px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 21px;
+
+    border:
+        1px dashed
+        rgba(255,255,255,.30);
+
+    background:
+        rgba(255,255,255,.06);
+
+    backdrop-filter:
+        blur(20px);
+
+    cursor: pointer;
+
+    font-size: 31px;
+
+    opacity: .65;
+
+    transition: .20s;
+
+}
+
+
+.addShortcut:hover {
+
+    opacity: 1;
+
+    background:
+        rgba(255,255,255,.13);
+
+    transform:
+        scale(1.04);
+
+}
+
+
+
+/* =========================
+   YOUTUBE MUSIC
+========================= */
+
+.youtubeMusicToggle {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 11px;
+    border-radius: 50px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    font-size: 11px;
+    opacity: .85;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 39px;
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    border-radius: 999px;
+    background: rgba(255,255,255,.20);
+    transition: .25s;
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 3px;
+    top: 3px;
+    border-radius: 50%;
+    background: white;
+    transition: .25s;
+}
+
+.switch input:checked + .slider {
+    background: rgba(255,255,255,.45);
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(17px);
+}
+
+.youtubePlayerWrap {
+    width: min(300px, 75%);
+    height: 0;
+    overflow: hidden;
+    margin-top: 8px;
+    border-radius: 18px;
+    transition: .2s;
+}
+
+.youtubePlayerWrap.active {
+    height: 169px;
+}
+
+.youtubePlayerWrap iframe {
+    width: 100%;
+    height: 169px;
+    border: 0;
+    border-radius: 18px;
+}
+
+.youtubeResults {
+    width: min(800px, 90%);
+    margin-top: 18px;
+    display: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.youtubeResult {
+    width: 150px;
+    min-height: 82px;
+    padding: 9px;
+    border-radius: 17px;
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.16);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    color: white;
+    cursor: pointer;
+    transition: .2s;
+    text-align: left;
+}
+
+.youtubeResult:hover {
+    transform: translateY(-4px);
+    background: rgba(255,255,255,.17);
+}
+
+.youtubeResultThumb {
+    width: 100%;
+    height: 55px;
+    border-radius: 10px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 7px;
+}
+
+.youtubeResultTitle {
+    font-size: 11px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.youtubeResultChannel {
+    margin-top: 3px;
+    font-size: 9px;
+    opacity: .5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.youtubeMusicNotice {
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    opacity: .65;
+}
+
+
+.youtubeApiKeyPanel {
+    width: min(360px, 82%);
+    margin-top: 7px;
+    display: flex;
+    gap: 6px;
+}
+
+.youtubeApiKeyPanel input {
+    flex: 1;
+    min-width: 0;
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.07);
+    color: white;
+    outline: none;
+    font-size: 11px;
+}
+
+.youtubeApiKeyPanel button {
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 10px;
+    background: rgba(255,255,255,.10);
+    color: white;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modalBackground {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        rgba(0,0,0,.45);
+
+    backdrop-filter:
+        blur(12px);
+
+    z-index: 100;
+
+}
+
+
+.modal {
+
+    width: min(
+        400px,
+        90%
+    );
+
+    padding: 27px;
+
+    border-radius: 25px;
+
+    background:
+        rgba(25,25,25,.70);
+
+    border:
+        1px solid
+        rgba(255,255,255,.20);
+
+    backdrop-filter:
+        blur(35px);
+
+    -webkit-backdrop-filter:
+        blur(35px);
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.50);
+
+}
+
+
+.modal h2 {
+
+    margin-bottom: 20px;
+
+    font-size: 21px;
+
+}
+
+
+.modal input {
+
+    width: 100%;
+
+    height: 48px;
+
+    margin-bottom: 12px;
+
+    padding: 0 15px;
+
+    border-radius: 13px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    background:
+        rgba(255,255,255,.09);
+
+    color: white;
+
+    outline: none;
+
+}
+
+
+.modal input::placeholder {
+
+    color:
+        rgba(255,255,255,.50);
+
+}
+
+
+.modalButtons {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 5px;
+
+}
+
+
+.modalButtons button {
+
+    flex: 1;
+
+    height: 45px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    color: white;
+
+    background:
+        rgba(255,255,255,.14);
+
+    cursor: pointer;
+
+}
+
+
+.modalButtons button:hover {
+
+    background:
+        rgba(255,255,255,.25);
+
+}
+
+/* =========================
+   MP3 PLAYER
+========================= */
+
+.musicPlayer {
+    width: min(300px, 75%);
+    margin-top: 12px;
+
+    padding: 10px 14px;
+
+    border-radius: 24px;
+
+    background: rgba(255,255,255,.10);
+
+    border: 1px solid rgba(255,255,255,.18);
+
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    box-shadow:
+        inset 0 1px rgba(255,255,255,.18),
+        0 10px 35px rgba(0,0,0,.25);
+}
+
+.musicTitle {
+    text-align: center;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    margin-bottom: 12px;
+
+    opacity: .9;
+}
+
+.musicControls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.musicControls button {
+    width: 25px;
+    height: 25px;
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.10);
+
+    color: white;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.musicControls button:hover {
+    background: rgba(255,255,255,.20);
+    transform: scale(1.06);
+}
+
+.musicControls .playButton {
+    width: 30px;
+    height: 30px;
+
+    font-size: 20px;
+
+    background: rgba(255,255,255,.18);
+}
+
+.musicProgress {
+    width: 100%;
+
+    margin-top: 13px;
+
+    accent-color: white;
+
+    cursor: pointer;
+}
+
+.musicTime {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 3px;
+
+    font-size: 10px;
+
+    opacity: .55;
+}
+
+</style>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     ARKA PLAN
+========================= -->
+
+<video
+    id="backgroundVideo"
+    autoplay
+    muted
+    loop
+    playsinline>
+
+    <source
+        src="https://najafoff-a24.github.io/database/videoplayback.mp4"
+        type="video/mp4">
+
+</video>
+
+<div class="videoBlur"></div>
+
+<div class="darkOverlay"></div>
+
+
+
+<!-- =========================
+     ANA
+========================= -->
+
+<div class="container">
+
+
+    <!-- SAAT -->
+
+    <div
+        class="clock"
+        id="clock">
+
+        00:00:00
+
+    </div>
+
+
+    <!-- TARİH -->
+
+    <div
+        class="date"
+        id="date">
+
+        ...
+
+    </div>
+
+
+    <!-- HAVA DURUMU -->
+
+    <div class="weather">
+
+        <span
+            class="weatherIcon"
+            id="weatherIcon">
+
+            ☀️
+
+        </span>
+
+        <span
+            class="weatherTemp"
+            id="temperature">
+
+            --°C
+
+        </span>
+
+        <span class="weatherLocation">
+
+            Bakı
+
+        </span>
+
+    </div>
+<!-- =========================
+     MP3 PLAYER
+========================= -->
+
+<div class="musicPlayer">
+
+    <div
+        class="musicTitle"
+        id="musicTitle">
+
+        Mahnı seçilməyib
+
+    </div>
+
+    <div class="musicControls">
+
+        <button onclick="previousSong()">
+            ⏮
+        </button>
+
+        <button onclick="toggleMusic()" class="playButton" id="playButton">
+            ▶
+        </button>
+
+        <button onclick="nextSong()">
+            ⏭
+        </button>
+
+    </div>
+
+    <input
+        type="range"
+        id="musicProgress"
+        class="musicProgress"
+        min="0"
+        max="100"
+        value="0"
+    >
+
+    <div class="musicTime">
+
+        <span id="currentTime">
+            0:00
+        </span>
+
+        <span id="duration">
+            0:00
+        </span>
+
+    </div>
+
+</div>
+
+
+<audio id="audio"></audio>
+
+<div class="youtubeMusicToggle">
+    <span>YouTube Music</span>
+    <label class="switch">
+        <input type="checkbox" id="youtubeMusicEnabled">
+        <span class="slider"></span>
+    </label>
+</div>
+
+<div id="youtubePlayerWrap" class="youtubePlayerWrap">
+    <div id="youtubePlayer"></div>
+</div>
+
+
+<div id="youtubeApiKeyPanel" class="youtubeApiKeyPanel">
+    <input
+        id="youtubeApiKey"
+        type="password"
+        placeholder="YouTube API açarı">
+    <button id="saveYoutubeApiKey" type="button">
+        Yadda saxla
+    </button>
+</div>
+<div id="youtubeResults" class="youtubeResults" aria-live="polite"></div>
+
+
+
+    <!-- =========================
+         ARAMA
+    ========================= -->
+
+    <div class="searchContainer">
+
+        <input
+            id="search"
+            class="search"
+            type="text"
+            autocomplete="off"
+            placeholder="Ara veya bir web sitesi aç...">
+
+        <span class="searchIcon">
+
+            ⌕
+
+        </span>
+
+    </div>
+
+
+
+    <!-- =========================
+         SHORTCUTLAR
+    ========================= -->
+
+    <div
+        class="shortcuts"
+        id="shortcuts">
+
+
+        <!-- EKLE -->
+
+        <div
+            class="addShortcut"
+            onclick="openModal()">
+
+            +
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     MODAL
+========================= -->
+
+<div
+    class="modalBackground"
+    id="modal">
+
+    <div class="modal">
+
+        <h2>
+            Shortcut Ekle
+        </h2>
+
+
+        <input
+            id="shortcutName"
+            type="text"
+            placeholder="Site adı">
+
+
+        <input
+            id="shortcutURL"
+            type="text"
+            placeholder="https://example.com">
+
+
+        <div class="modalButtons">
+
+            <button
+                onclick="addShortcut()">
+
+                Ekle
+
+            </button>
+
+
+            <button
+                onclick="closeModal()">
+
+                İptal
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   SAAT
+===================================================== */
+
+function updateClock() {
+
+    const now =
+        new Date();
+
+
+    const hours =
+        String(
+            now.getHours()
+        ).padStart(2,"0");
+
+
+    const minutes =
+        String(
+            now.getMinutes()
+        ).padStart(2,"0");
+
+
+    const seconds =
+        String(
+            now.getSeconds()
+        ).padStart(2,"0");
+
+
+    document
+        .getElementById("clock")
+        .textContent =
+        `${hours}:${minutes}:${seconds}`;
+
+
+
+    const days = [
+
+        "Pazar",
+
+        "Pazartesi",
+
+        "Salı",
+
+        "Çarşamba",
+
+        "Perşembe",
+
+        "Cuma",
+
+        "Cumartesi"
+
+    ];
+
+
+    const months = [
+
+        "Ocak",
+
+        "Şubat",
+
+        "Mart",
+
+        "Nisan",
+
+        "Mayıs",
+
+        "Haziran",
+
+        "Temmuz",
+
+        "Ağustos",
+
+        "Eylül",
+
+        "Ekim",
+
+        "Kasım",
+
+        "Aralık"
+
+    ];
+
+
+    document
+        .getElementById("date")
+        .textContent =
+
+        `${days[now.getDay()]}, ` +
+        `${now.getDate()} ` +
+        `${months[now.getMonth()]} ` +
+        `${now.getFullYear()}`;
+
+}
+
+
+updateClock();
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+
+/* =====================================================
+   ARAMA
+===================================================== */
+
+const search =
+    document.getElementById("search");
+
+
+
+const youtubeMusicEnabled =
+    document.getElementById("youtubeMusicEnabled");
+
+const youtubeResults =
+    document.getElementById("youtubeResults");
+
+const youtubePlayerWrap =
+    document.getElementById("youtubePlayerWrap");
+
+let youtubePlayer = null;
+let youtubeApiReady = false;
+let youtubeCurrentVideoId = null;
+
+
+function onYouTubeIframeAPIReady() {
+
+    youtubeApiReady = true;
+
+    youtubePlayer =
+        new YT.Player("youtubePlayer", {
+
+            height: "169",
+            width: "300",
+
+            playerVars: {
+                playsinline: 1,
+                controls: 1,
+                rel: 0,
+                modestbranding: 1
+            },
+
+            events: {
+
+                onReady: function() {},
+
+                onStateChange:
+                    function(event) {
+
+                        if (
+                            event.data ===
+                            YT.PlayerState.PLAYING
+                        ) {
+
+                            playButton.textContent =
+                                "⏸";
+
+                        }
+
+                        if (
+                            event.data ===
+                            YT.PlayerState.PAUSED ||
+                            event.data ===
+                            YT.PlayerState.ENDED
+                        ) {
+
+                            playButton.textContent =
+                                "▶";
+
+                        }
+
+                    }
+
+            }
+
+        });
+
+}
+
+
+youtubeMusicEnabled.addEventListener(
+    "change",
+    function() {
+
+        localStorage.setItem(
+            "youtubeMusicEnabled",
+            this.checked ? "true" : "false"
+        );
+
+        youtubeResults.style.display =
+            this.checked ? "flex" : "none";
+
+        if (!this.checked) {
+
+            youtubeResults.innerHTML = "";
+
+            youtubePlayerWrap.classList.remove(
+                "active"
+            );
+
+            if (
+                youtubePlayer &&
+                youtubePlayer.pauseVideo
+            ) {
+
+                youtubePlayer.pauseVideo();
+
+            }
+
+        }
+
+    }
+);
+
+
+async function searchYouTubeMusic(query) {
+
+    youtubeResults.style.display = "flex";
+
+    youtubeResults.innerHTML = `
+        <div class="youtubeMusicNotice">
+            YouTube axtarışı üçün API açarı tələb olunur.
+        </div>
+    `;
+
+    /*
+       API açarını aşağıdakı dəyişənə yaz:
+       const YOUTUBE_API_KEY = "AIza...";
+    */
+
+    const YOUTUBE_API_KEY =
+        localStorage.getItem(
+            "youtubeApiKey"
+        ) || "";
+
+    if (!YOUTUBE_API_KEY) {
+
+        youtubeResults.innerHTML = `
+            <div class="youtubeMusicNotice">
+                YouTube API açarı təyin edilməyib.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    try {
+
+        const params =
+            new URLSearchParams({
+
+                part: "snippet",
+
+                q: query + " official audio",
+
+                type: "video",
+
+                videoCategoryId: "10",
+
+                videoEmbeddable: "true",
+
+                maxResults: "8",
+
+                regionCode: "AZ",
+
+                relevanceLanguage: "az",
+
+                key: YOUTUBE_API_KEY
+
+            });
+
+
+        const response =
+            await fetch(
+                "https://www.googleapis.com/youtube/v3/search?" +
+                params.toString()
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "YouTube API xətası: " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        renderYouTubeResults(
+            data.items || []
+        );
+
+    }
+
+    catch (error) {
+
+        youtubeResults.innerHTML = `
+            <div class="youtubeMusicNotice">
+                YouTube nəticələri alınmadı.
+            </div>
+        `;
+
+        console.error(error);
+
+    }
+
+}
+
+
+function renderYouTubeResults(items) {
+
+    youtubeResults.innerHTML = "";
+
+    if (!items.length) {
+
+        youtubeResults.innerHTML = `
+            <div class="youtubeMusicNotice">
+                Nəticə tapılmadı.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    items.forEach(
+        function(item) {
+
+            const videoId =
+                item?.id?.videoId;
+
+            const snippet =
+                item?.snippet;
+
+            if (!videoId || !snippet)
+                return;
+
+
+            const result =
+                document.createElement(
+                    "button"
+                );
+
+
+            result.type = "button";
+
+            result.className =
+                "youtubeResult";
+
+
+            const thumb =
+                snippet.thumbnails?.medium?.url ||
+                snippet.thumbnails?.default?.url ||
+                "";
+
+
+            result.innerHTML = `
+
+                <img
+                    class="youtubeResultThumb"
+                    src="${escapeHTML(thumb)}"
+                    alt=""
+                >
+
+                <div
+                    class="youtubeResultTitle">
+
+                    ${escapeHTML(
+                        snippet.title
+                    )}
+
+                </div>
+
+                <div
+                    class="youtubeResultChannel">
+
+                    ${escapeHTML(
+                        snippet.channelTitle || ""
+                    )}
+
+                </div>
+
+            `;
+
+
+            result.addEventListener(
+                "click",
+                function() {
+
+                    playYouTubeVideo(
+                        videoId,
+                        snippet.title
+                    );
+
+                }
+            );
+
+
+            youtubeResults.appendChild(
+                result
+            );
+
+        }
+    );
+
+}
+
+
+function playYouTubeVideo(
+    videoId,
+    title
+) {
+
+    if (
+        !youtubeApiReady ||
+        !youtubePlayer
+    ) {
+
+        alert(
+            "YouTube player hələ hazır deyil. Səhifəni yenilə və yenidən yoxla."
+        );
+
+        return;
+
+    }
+
+    audio.pause();
+
+    youtubeCurrentVideoId =
+        videoId;
+
+    musicTitle.textContent =
+        title;
+
+    youtubePlayerWrap.classList.add(
+        "active"
+    );
+
+    /*
+       Bu funksiya nəticə kartının klikindən çağırıldığı üçün
+       brauzerin istifadəçi jesti kimi qəbul olunur.
+    */
+    youtubePlayer.loadVideoById({
+        videoId: videoId,
+        suggestedQuality: "small"
+    });
+
+    playButton.textContent =
+        "⏸";
+
+}
+
+
+function toggleMusic() {
+
+    /*
+       YouTube Music modu aktivdirsə,
+       eyni play düyməsi YouTube playeri idarə edir.
+    */
+
+    if (
+        youtubeMusicEnabled.checked
+    ) {
+
+        if (
+            !youtubePlayer
+        ) return;
+
+
+        const state =
+            youtubePlayer.getPlayerState();
+
+
+        if (
+            state ===
+            YT.PlayerState.PLAYING
+        ) {
+
+            youtubePlayer.pauseVideo();
+
+        } else {
+
+            youtubePlayer.playVideo();
+
+        }
+
+        return;
+
+    }
+
+
+    /*
+       Adi MP3 modu
+    */
+
+    if (audio.paused) {
+
+        audio.play();
+
+    } else {
+
+        audio.pause();
+
+    }
+
+}
+
+
+function previousSong() {
+
+    if (
+        youtubeMusicEnabled.checked
+    ) return;
+
+
+    currentSong--;
+
+    if (currentSong < 0) {
+
+        currentSong =
+            songs.length - 1;
+
+    }
+
+    loadSong(currentSong);
+
+    audio.play();
+
+}
+
+
+function nextSong() {
+
+    if (
+        youtubeMusicEnabled.checked
+    ) return;
+
+
+    currentSong++;
+
+    if (currentSong >= songs.length) {
+
+        currentSong = 0;
+
+    }
+
+    loadSong(currentSong);
+
+    audio.play();
+
+}
+
+
+search.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key !== "Enter"
+        ) return;
+
+
+        let value =
+            search.value.trim();
+
+
+        if (!value) return;
+
+
+        if (
+            youtubeMusicEnabled.checked
+        ) {
+
+            searchYouTubeMusic(
+                value
+            );
+
+            search.value = "";
+
+            return;
+
+        }
+
+
+        const looksLikeURL =
+
+            value.startsWith(
+                "http://"
+            ) ||
+
+            value.startsWith(
+                "https://"
+            ) ||
+
+            value.includes(".com") ||
+
+            value.includes(".net") ||
+
+            value.includes(".org") ||
+
+            value.includes(".az") ||
+
+            value.includes(".io");
+
+
+        if (looksLikeURL) {
+
+            if (
+                !value.startsWith("http://") &&
+                !value.startsWith("https://")
+            ) {
+
+                value =
+                    "https://" + value;
+
+            }
+
+
+            window.open(
+                value,
+                "_blank"
+            );
+
+        }
+
+        else {
+
+            window.open(
+
+                "https://www.google.com/search?q=" +
+                encodeURIComponent(value),
+
+                "_blank"
+
+            );
+
+        }
+
+
+        search.value = "";
+
+    }
+);
+
+
+youtubeMusicEnabled.checked =
+    localStorage.getItem(
+        "youtubeMusicEnabled"
+    ) === "true";
+
+
+youtubeResults.style.display =
+    youtubeMusicEnabled.checked
+        ? "flex"
+        : "none";
+
+const youtubeApiKeyInput =
+    document.getElementById("youtubeApiKey");
+
+const saveYoutubeApiKey =
+    document.getElementById("saveYoutubeApiKey");
+
+youtubeApiKeyInput.value =
+    localStorage.getItem(
+        "youtubeApiKey"
+    ) || "";
+
+saveYoutubeApiKey.addEventListener(
+    "click",
+    function() {
+
+        const key =
+            youtubeApiKeyInput.value.trim();
+
+        if (!key) {
+
+            localStorage.removeItem(
+                "youtubeApiKey"
+            );
+
+            return;
+
+        }
+
+        localStorage.setItem(
+            "youtubeApiKey",
+            key
+        );
+
+    }
+);
+
+
+
+/* =====================================================
+   HAVA DURUMU
+===================================================== */
+
+
+/*
+   Bakı koordinatları
+*/
+
+const latitude =
+    40.4093;
+
+const longitude =
+    49.8671;
+
+
+async function getWeather() {
+
+    try {
+
+        const response =
+            await fetch(
+
+                `https://api.open-meteo.com/v1/forecast` +
+                `?latitude=${latitude}` +
+                `&longitude=${longitude}` +
+                `&current=temperature_2m,weather_code` +
+                `&timezone=Asia%2FBaku`
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        const temp =
+            Math.round(
+                data.current.temperature_2m
+            );
+
+
+        const code =
+            data.current.weather_code;
+
+
+        document
+            .getElementById("temperature")
+            .textContent =
+            `${temp}°C`;
+
+
+        document
+            .getElementById("weatherIcon")
+            .textContent =
+            getWeatherIcon(code);
+
+
+    }
+
+    catch(error) {
+
+        document
+            .getElementById("temperature")
+            .textContent =
+            "--°C";
+
+    }
+
+}
+
+
+function getWeatherIcon(code) {
+
+    if (code === 0)
+        return "☀️";
+
+
+    if (code <= 3)
+        return "🌤️";
+
+
+    if (code <= 48)
+        return "🌫️";
+
+
+    if (code <= 67)
+        return "🌧️";
+
+
+    if (code <= 77)
+        return "❄️";
+
+
+    if (code <= 82)
+        return "🌦️";
+
+
+    return "⛈️";
+
+}
+
+
+getWeather();
+
+
+
+/* =====================================================
+   SHORTCUT SİSTEMİ
+===================================================== */
+
+const shortcuts =
+    document.getElementById(
+        "shortcuts"
+    );
+
+
+const addShortcutButton =
+    document.querySelector(
+        ".addShortcut"
+    );
+
+
+
+/* =====================================================
+   SHORTCUT AÇ
+===================================================== */
+
+function openSite(url) {
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+
+
+/* =====================================================
+   SHORTCUT YARAT
+===================================================== */
+
+function createShortcut(
+    name,
+    url
+) {
+
+
+    const shortcut =
+        document.createElement(
+            "div"
+        );
+
+
+    shortcut.className =
+        "shortcut";
+
+
+    shortcut.draggable =
+        true;
+
+
+    shortcut.dataset.name =
+        name;
+
+
+    shortcut.dataset.url =
+        url;
+
+
+    shortcut.innerHTML = `
+
+        <img
+            src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(url)}&sz=128"
+            onerror="this.src='https://www.google.com/favicon.ico'"
+        >
+
+        <span class="shortcutName">
+            ${escapeHTML(name)}
+        </span>
+
+    `;
+
+
+    /* =========================
+       SOL KLİK
+    ========================= */
+
+    shortcut.addEventListener(
+        "click",
+        function() {
+
+            openSite(url);
+
+        }
+    );
+
+
+    /* =========================
+       SAĞ KLİK = SİL
+    ========================= */
+
+    shortcut.addEventListener(
+        "contextmenu",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const deleteConfirm =
+                confirm(
+                    `"${name}" shortcutunu silmek istəyirsən?`
+                );
+
+
+            if (
+                deleteConfirm
+            ) {
+
+                shortcut.remove();
+
+                saveShortcuts();
+
+            }
+
+        }
+    );
+
+
+    /* =========================
+       DRAG START
+    ========================= */
+
+    shortcut.addEventListener(
+        "dragstart",
+        function() {
+
+            shortcut.classList.add(
+                "dragging"
+            );
+
+        }
+    );
+
+
+    /* =========================
+       DRAG END
+    ========================= */
+
+    shortcut.addEventListener(
+        "dragend",
+        function() {
+
+            shortcut.classList.remove(
+                "dragging"
+            );
+
+            saveShortcuts();
+
+        }
+    );
+
+
+    /*
+       + düyməsindən əvvəl əlavə et
+    */
+
+    shortcuts.insertBefore(
+        shortcut,
+        addShortcutButton
+    );
+
+}
+
+
+
+/* =====================================================
+   DRAG & DROP
+===================================================== */
+
+shortcuts.addEventListener(
+    "dragover",
+    function(event) {
+
+        event.preventDefault();
+
+
+        const dragging =
+            document.querySelector(
+                ".dragging"
+            );
+
+
+        if (!dragging)
+            return;
+
+
+        const items =
+            [
+                ...shortcuts.querySelectorAll(
+                    ".shortcut:not(.dragging)"
+                )
+            ];
+
+
+        let closest = null;
+
+        let closestOffset =
+            Number.NEGATIVE_INFINITY;
+
+
+        items.forEach(
+            function(item) {
+
+                const box =
+                    item.getBoundingClientRect();
+
+
+                const offset =
+
+                    event.clientX -
+                    box.left -
+                    box.width / 2;
+
+
+                if (
+                    offset < 0 &&
+                    offset > closestOffset
+                ) {
+
+                    closestOffset =
+                        offset;
+
+                    closest =
+                        item;
+
+                }
+
+            }
+        );
+
+
+        if (closest) {
+
+            shortcuts.insertBefore(
+                dragging,
+                closest
+            );
+
+        }
+
+        else {
+
+            shortcuts.insertBefore(
+                dragging,
+                addShortcutButton
+            );
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   SHORTCUTLARI YADDA SAXLA
+===================================================== */
+
+function saveShortcuts() {
+
+
+    const elements =
+
+        [
+            ...shortcuts.querySelectorAll(
+                ".shortcut"
+            )
+        ];
+
+
+    const data =
+
+        elements.map(
+            function(item) {
+
+                return {
+
+                    name:
+                        item.dataset.name,
+
+                    url:
+                        item.dataset.url
+
+                };
+
+            }
+        );
+
+
+    localStorage.setItem(
+
+        "necoShortcuts",
+
+        JSON.stringify(data)
+
+    );
+
+}
+
+
+
+/* =====================================================
+   SHORTCUTLARI YÜKLƏ
+===================================================== */
+
+function loadShortcuts() {
+
+
+    const saved =
+
+        JSON.parse(
+
+            localStorage.getItem(
+                "necoShortcuts"
+            ) || "[]"
+
+        );
+
+
+    saved.forEach(
+        function(item) {
+
+            createShortcut(
+                item.name,
+                item.url
+            );
+
+        }
+    );
+
+}
+
+
+loadShortcuts();
+
+
+
+/* =====================================================
+   SHORTCUT ƏLAVƏ ET
+===================================================== */
+
+function addShortcut() {
+
+
+    const name =
+
+        document
+        .getElementById(
+            "shortcutName"
+        )
+        .value
+        .trim();
+
+
+    let url =
+
+        document
+        .getElementById(
+            "shortcutURL"
+        )
+        .value
+        .trim();
+
+
+    if (
+        !name ||
+        !url
+    ) {
+
+        alert(
+            "Site adı və link daxil et."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !url.startsWith(
+            "http://"
+        ) &&
+        !url.startsWith(
+            "https://"
+        )
+    ) {
+
+        url =
+            "https://" + url;
+
+    }
+
+
+    createShortcut(
+        name,
+        url
+    );
+
+
+    saveShortcuts();
+
+
+    document
+        .getElementById(
+            "shortcutName"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "shortcutURL"
+        )
+        .value = "";
+
+
+    closeModal();
+
+}
+
+
+
+/* =====================================================
+   HTML TƏHLÜKƏSİZLİYİ
+===================================================== */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text;
+
+
+    return div.innerHTML;
+
+}
+
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function openModal() {
+
+    document
+        .getElementById(
+            "modal"
+        )
+        .style.display =
+        "flex";
+
+}
+
+
+function closeModal() {
+
+    document
+        .getElementById(
+            "modal"
+        )
+        .style.display =
+        "none";
+
+}
+
+
+
+/* =====================================================
+   ESC = MODAL BAĞLA
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   MODALIN ÇÖLÜNƏ BASANDA BAĞLA
+===================================================== */
+
+document
+    .getElementById("modal")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target === this
+            ) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+/* =====================================================
+   MP3 PLAYER
+===================================================== */
+
+const songs = [
+    "1. Zaur Aşiq - Gəşəy gəşəy",
+    "2. Kron1k - Yarım kalan sigara",
+    "3. Nico Parga - Season",
+    "4. Okaber - Son Mahnı",
+    "5. Sagopa Kajmer - Merhametine Dön",
+    "6. Diva - Beyonce",
+    "7. Breyth - Indra",
+    "8. Ramil Shadman - Avara",
+    "9. All Eyez on me",
+    "10. Hüseyn Dərya - Köhnə Bakı",
+    "11. Mos Def - Auditorium",
+    "12. KVPV - Vulgar",
+    "13. Disiz.La.Peste - À La Conquête",
+    "14. Bouga - Belsunce Breakdown",
+    "15. Regarde - Claap! & S.A.N.T.A.N.A.",
+    "16. Üzeyir Mehdizadə - Rəvayət",
+    "17. Jah Khalib - SnD",
+    "18. Narkoz Ex - Tatlı Tecrübe",
+    "19. Üzeyir Mehdizade - Denqi Denqi",
+    "20. Mehdi Sadiq - Yaşamaq Lazım",
+    "21. Essay - Find You",
+    "22. Mary J. Blige - Family Affair",
+    "23. Mürsəl Səfərov - Avara",
+    "24. Bizzey - Traag",
+    "25. Furilla@Joy - Afrodisiak",
+    "26. Edward Maya - Stereo Love",
+    "27. Rəhim Maştağa - Çitan Çitan",
+    "28. MOSART - Afrika Nadi",
+    "29. Cücələrim Phonk",
+    "30. Zawanbeats - Baku Project",
+    "31. Mürsəl Səfərov - Boş ver",
+    "32. GuiltyBeatz - AKWAABA",
+    "33. Buraka Som Sistema - Kalemba",
+    "34. Etimad - Günah Kimdədir",
+    "35. Aydın Sani - İcazə ver",
+    "36. Ömer Bükülmezoğlu - Cry",
+    "37. Moon EC - HazenMusic",
+    "38. Sagopa Kajmer & Kolera - Merhametine Dön",
+    "39. I Got Summer On My Mind",
+    "40. Jivishov - Dünya Hey Fırlanır",
+    "41. Umut INC. - Yenə Gedirəm Mal Mal Dalınca",
+    "42. Elit Star Cəmilə - Yollarıma Çıxma",
+    "43. DJ Sebastian Fernández - Mix Rkt 2024 (Remix)",
+    "44. Burak - Ben Kalbimin Orta Yerine Seni Yazdım",
+    "45. Crazy Frog - 1001 Nights (Bass Boosted)",
+    "46. Chipinkos - İntro",
+    "47. Ehtiram - Как Xорошо Tак Xорошо",
+    "48. DJ JHOLJHOL DA PENHA - UH UH UH VS AQUI NA PENHA",
+    "49. Rəşad Dağlı - Daha Nə Baxırsan",
+    "50. V $ X V PRiNCE - Не интересно",
+    "51. Bouga - Belsunce Breakdown",
+    "52. KVPV - Vulgar (Slow)",
+    "53. Shaggy - Mad Mad World",
+    "54. Kəmalə Günəşli - Çini Çaydan",
+    "55. Nuri Sərinləndirici - Gözləyirəm",
+    "56. Misha Xramovi - В экстазе",
+    "57. Mürsəl Səfərov - Məni İtirdin",
+    "58. Snoop Dogg - Dr.Dre (Remix)",
+    "59. Ədalət Şükürov - Bağlı Qapı",
+    "60. Seymur Məmmədov - Sevdiyim İnsan",
+    "61. DJ Sebastian Fernández - Mix Rkt 2024 (Remix)",
+    "62. Günay İbrahimli - Sənə Bağlanıram",
+    "63. Beat Dominator - Bass...Can U Hear Me?",
+    "64. Biz - Black Night",
+    "65. Xcho - Эскизы",
+    "66. Henrique Camacho & Fatality - Sevilla",
+    "67. Ramil Nabran - Bomba",
+    "68. Roy Jones Jr. - Can't Be Touched",
+    "69. Jay Meel - Popuri",
+    "70. Qaraqan - Sən və Mən",
+    "71. Flora Kərimova - Məni Məni",
+    "72. Alexandra Stan - Mr. Saxobeat",
+    "73. Mc Leléto - Ay Papi",
+    "74. Təhmin Vəlizadə - Ölərdi",
+    "75. DJ Freshly - Latinos a Bailar",
+    "76. Mario Fresh & RENVTØ - Necesar",
+    "77. Edward Maya & Vika Jigulina - Stereo Love",
+    "78. Tefo & FatS - Niva Verir Təbi 2015",
+    "79. SHAHMEN - Mark",
+    "80. BONES - Sodium",
+    "81. Edsited & Kid Moonsta - Tiktok Anthem",
+    "82. Bad Bunny - La Romana",
+    "83. Youngworldibi - Still Me (Freestyle)",
+    "84. Aygün - Yenə Tək",
+    "85. Miro - Təcili Yardım",
+    "86. isabb - Я хочу приору",
+    "87. Matt Sebastian - Dandole Rakataka",
+    "88. Yatın İstisi Şüşələr Aşağıda",
+    "89. JANAGA - Малыш",
+    "90. Ace of Base - Happy Nation",
+    "91. Black Light - Ayrılmarıq",
+    "92. Dj Gere - Mega Ñengo Flow Rkt",
+    "93. Yyyikes! - Way U Move",
+    "94. Ədalət Şükürov - Açıq Qapı",
+    "95. Geceler",
+    "96. The Game - How We Do",
+    "97. Xosrov - Burda Görmüyüm Səni",
+    "98. Elit Star Cəmilə - Ayrılığı Mənə Sən Öyrətmisən",
+    "99. Qoy Qış Gəlsin",
+    "100. Sagopa Kajmer - Bu Böyledir (2021 Tek Edit)",
+    "101. DJ Sebastian Fernández - Mix Rkt 2024 (Remix)",
+    "102. Roy Jones Jr. - Can't Be Touched",
+    "103. Matt Sebastian - Dandole Rakataka",
+    "104. Mohammed - Sie Liegt In Meinen Armen",
+    "105. Talıb Tale - Bilirsənki",
+    "106. MegaBeatsZ - Hesret Neğməsi Remix",
+    "107. Don Omar - Dale Don Dale",
+    "108. Okaber - Axtarma",
+    "109. Ramil Nabran - Aftoş Gəlir",
+    "110. Donny Duardo - Agáchate",
+    "111. V $ X V PRiNCE - Голодная собака",
+    "112. Javid Amir - Yenə Ağlımda",
+    "113. Vahid Rostami - Getme Yarim",
+    "114. Elşad - Qara",
+    "115. Keti Garbi - Esena Mono (Summer Dance Remix)",
+    "116. EA7 - In Da Club",
+    "117. Crazy Frog - 1001 Nights",
+    "118. Nuri Serinlendirici - Durnam",
+    "119. DJ Maphorisa & Shimza - Makhe",
+    "120. Javid Amir - Hardan Hara",
+    "121. İlkin Abbasov & Lila Hood - Günah",
+    "122. Pharoahe Monch - Simon Says",
+    "123. Sir Speedy - Vamo Allá (feat. Great Kilo)",
+    "124. Talıb Tale & Zeynəb Həsəni - Səbr Elə",
+    "125. SERYOGA - Чёрный бумеp",
+    "126. Sean Paul - Temperature",
+    "127. Гио ПиКа - Один в поле воин",
+    "128. Zamiq Hüseynov - Kaman",
+    "129. Ludacris - Act a Fool",
+    "130. Tuti Dj - El Hechizo Rkt",
+    "131. Fan - Politics (as always) (Feat. Smoke Greene & Iroq)",
+    "132. Massive Lust - Never",
+    "133. Aydınçik - Gülnarə",
+    "134. Talıb Tale - Gecəmiz",
+    "135. Vüqar Biləcəri - Gəlin Deyək Meyxana Muzikalni",
+    "136. Francesco Ricci - Over You",
+    "137. Lana Del Rey - Diet Mountain Dew",
+    "138. Basta & HammAli & Navai - Где ты теперь и с кем",
+    "139. Massari - Inta Hayati",
+    "140. Diet Mountain Dew",
+    "141. Kaspiyskiy Gruz - Доедешь - пиши",
+    "142. Gesaffelstein - Opr",
+    "143. Alighieri - Recomposition Twelve",
+    "144. Ulukmanapo - Не сегодня",
+    "145. NAYMADA - Ты мой рай",
+    "146. Ivan Afro5 - Strange",
+    "147. USHER - Yeah!",
+    "148. Speedy - Sientelo",
+    "149. sayc.latam - BLUNTED 4",
+    "150. Afrikan Drums - Comitin Dedo",
+    "151. WEGH - KARARDI BULUTLAR",
+    "152. Cheb Rezki - Ana Al Ghaltan",
+    "153. Bezpan - Sosial",
+    "154. KRBK - Девушка в чёрном",
+    "155. Elit Star Cəmilə - Səninəm",
+    "156. Jennifer Lopez - On the Floor",
+    "157. Inna - Amazing",
+    "158. 7azilov - Нежно х тримай",
+    "159. Fatih Bogalar - Te Ma Etmaje",
+    "160. Mahir - Dönər Əlbət",
+    "161. DoggyStyleeee - West Coast",
+    "162. Okaber - Xarabadan Qeydlər (18+)",
+    "163. Eyyub Yaqubov - Bakılı Balası",
+    "164. Uzeyir Mehdizade - Təki Sən Xoşbəxt Olasan",
+    "165. Tuğçe Kandemir - Aradan Çok Yıllar Geçti.",
+    "166. Breyth - Increasing Attitude",
+    "167. Gunay Ibrahimli - Dəlisiyəm Gecənin",
+    "168. Bianka - Были танцы",
+    "169. Xəzər Süleymanlı & Nazan Öncel - Beni Hatırla",
+    "170. AIS - Nece Darıxmışam",
+    "171. Rashad RC ft. Arzu Mələk - Qaytar Eşqimi",
+    "172. Cala Boca slowed",
+    "173. P0izi - Perde",
+    "174. Xatirə İslam - Peşmansan mı",
+    "175. Üzeyir Mehdizadə - Yadımdadır"
+];
+
+let currentSong = 0;
+
+const audio =
+    document.getElementById("audio");
+
+const musicTitle =
+    document.getElementById("musicTitle");
+
+const playButton =
+    document.getElementById("playButton");
+
+const musicProgress =
+    document.getElementById("musicProgress");
+
+const currentTimeElement =
+    document.getElementById("currentTime");
+
+const durationElement =
+    document.getElementById("duration");
+
+
+function loadSong(index) {
+
+    currentSong = index;
+
+    musicTitle.textContent =
+        songs[index];
+
+    audio.src =
+        "https://najafoff-a24.github.io/database/track%20(" +
+        (index + 1) +
+        ").mp3";
+
+    audio.load();
+
+    musicProgress.value = 0;
+
+    currentTimeElement.textContent =
+        "0:00";
+
+}
+
+
+function legacy_toggleMusic() {
+
+    if (audio.paused) {
+
+        audio.play();
+
+        playButton.textContent =
+            "⏸";
+
+    } else {
+
+        audio.pause();
+
+        playButton.textContent =
+            "▶";
+
+    }
+
+}
+
+
+function legacy_previousSong() {
+
+    currentSong--;
+
+    if (currentSong < 0) {
+
+        currentSong =
+            songs.length - 1;
+
+    }
+
+    loadSong(currentSong);
+
+    audio.play();
+
+    playButton.textContent =
+        "⏸";
+
+}
+
+
+function legacy_nextSong() {
+
+    currentSong++;
+
+    if (currentSong >= songs.length) {
+
+        currentSong = 0;
+
+    }
+
+    loadSong(currentSong);
+
+    audio.play();
+
+    playButton.textContent =
+        "⏸";
+
+}
+
+
+audio.addEventListener(
+    "timeupdate",
+    function() {
+
+        if (!audio.duration)
+            return;
+
+        const progress =
+            (audio.currentTime /
+            audio.duration) * 100;
+
+        musicProgress.value =
+            progress;
+
+        currentTimeElement.textContent =
+            formatTime(
+                audio.currentTime
+            );
+
+    }
+);
+
+
+audio.addEventListener(
+    "loadedmetadata",
+    function() {
+
+        durationElement.textContent =
+            formatTime(
+                audio.duration
+            );
+
+    }
+);
+
+
+musicProgress.addEventListener(
+    "input",
+    function() {
+
+        if (!audio.duration)
+            return;
+
+        audio.currentTime =
+            (musicProgress.value / 100) *
+            audio.duration;
+
+    }
+);
+
+
+audio.addEventListener(
+    "ended",
+    function() {
+
+        nextSong();
+
+    }
+);
+
+
+audio.addEventListener(
+    "play",
+    function() {
+
+        playButton.textContent =
+            "⏸";
+
+    }
+);
+
+
+audio.addEventListener(
+    "pause",
+    function() {
+
+        playButton.textContent =
+            "▶";
+
+    }
+);
+
+
+function formatTime(seconds) {
+
+    if (
+        !seconds ||
+        isNaN(seconds)
+    ) {
+
+        return "0:00";
+
+    }
+
+    const minutes =
+        Math.floor(seconds / 60);
+
+    const secs =
+        Math.floor(seconds % 60)
+        .toString()
+        .padStart(2, "0");
+
+    return `${minutes}:${secs}`;
+
+}
+
+
+/*
+   İlk mahnını hazırla
+*/
+
+loadSong(0);
+
+</script>
+
+</body>
+</html>
